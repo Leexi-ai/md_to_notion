@@ -29,8 +29,6 @@ module MdToNotion
             next @stack << " "
           elsif next_char == "#"
             tokenize_heading
-          elsif next_char == "["
-            tokenize_link
           elsif next_char == "!"
             tokenize_image
           elsif ALLOWED_VIDEO_EMBED_URLS.join("").include?(peek(41))
@@ -96,15 +94,6 @@ module MdToNotion
       @stack = []
 
       @tokens << bullet_list(::Regexp.last_match(0), nesting: nesting)
-      @index += ::Regexp.last_match(0).length
-    end
-
-    def tokenize_link
-      line = @markdown[@index..].split("\n").first
-      raise InvalidTokenSyntaxError, "Invalid link syntax: #{line}" \
-        unless line =~ LINK
-
-      @tokens << link(::Regexp.last_match(0))
       @index += ::Regexp.last_match(0).length
     end
 

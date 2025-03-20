@@ -77,7 +77,8 @@ module MdToNotion
 
     def tokenize_rich_text(text)
       # use a regular expression to capture all the rich text elements and the text between them as separate groups
-      groups = text.scan(/(`[^`]*`|\*\*[^*]*\*\*|\*[^*]*\*|~~[^~]*~~|\[([^\]]+)\]\(([^)]+)\)|[^`*~\[\]]+)/).flatten
+      # use non-capturing groups (?:) instead of capturing groups () for the link parts
+      groups = text.scan(/(`[^`]*`|\*\*[^*]*\*\*|\*[^*]*\*|~~[^~]*~~|\[(?:[^\]]+)\]\((?:[^)]+)\)|[^`*~\[\]]+)/).flatten
 
       # map the groups to tokens
       groups.map do |group|

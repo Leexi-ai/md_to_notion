@@ -8,7 +8,7 @@
 
 1. number
 
-paragraph
+paragraph with a link to [Notion](https://www.notion.so/)
 
 ```c
 int main() {

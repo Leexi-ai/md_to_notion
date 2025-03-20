@@ -139,7 +139,7 @@
         {
           "type": "text",
           "text": {
-            "content": "paragraph",
+            "content": "paragraph with a link to ",
             "link": null
           },
           "annotations": {
@@ -150,6 +150,20 @@
             "code": false
           },
           "href": null
+        }, {
+          "type": "text",
+          "text": {
+            "content": "Notion",
+            "link": "https://www.notion.so/"
+          },
+          "annotations": {
+            "bold": false,
+            "italic": false,
+            "strikethrough": false,
+            "underline": false,
+            "code": false
+          },
+          "href": "https://www.notion.so/"
         }
       ]
     }

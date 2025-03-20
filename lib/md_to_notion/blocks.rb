@@ -99,7 +99,7 @@ module MdToNotion
       }
     end
 
-    def self.rich_text(token, annotations: {}, href: nil, link: nil)
+    def self.rich_text(token, annotations: {})
       default_annotations = {
         bold: token[:type] == :bold,
         italic: token[:type] == :italic,
@@ -112,10 +112,10 @@ module MdToNotion
         type: "text",
         text: {
           content: token[:text],
-          link: link
+          link: token[:link]
         },
         annotations: default_annotations.merge(annotations),
-        href: href
+        href: token[:link]
       }
     end
   end

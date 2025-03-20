@@ -12,6 +12,7 @@ module MdToNotion
     QUOTE = /^> (.+)/.freeze
     GH_EMBED_FILE = %r{https://user-images\.githubusercontent\.com/.+\.[a-zA-Z]+}.freeze
     EMBED_FILE_REGEXES = [GH_EMBED_FILE].freeze
+    LINK = /\[([^\]]+)\]\(([^)]+)\)/.freeze
 
     def heading_1(match)
       { type: :heading_1, rich_texts: tokenize_rich_text(match.gsub(/^# /, "")) }
@@ -76,7 +77,7 @@ module MdToNotion
 
     def tokenize_rich_text(text)
       # use a regular expression to capture all the rich text elements and the text between them as separate groups
-      groups = text.scan(/(`[^`]*`|\*\*[^*]*\*\*|\*[^*]*\*|~~[^~]*~~|[^`*~]+)/).flatten
+      groups = text.scan(/(`[^`]*`|\*\*[^*]*\*\*|\*[^*]*\*|~~[^~]*~~|\[([^\]]+)\]\(([^)]+)\)|[^`*~\[\]]+)/).flatten
 
       # map the groups to tokens
       groups.map do |group|
@@ -89,6 +90,8 @@ module MdToNotion
           italic(group)
         when /^~~/
           strikethrough(group)
+        when /^\[/
+          link(group)
         else
           text(group)
         end
@@ -99,20 +102,24 @@ module MdToNotion
       { type: :code, text: text.gsub(/^`/, "").gsub(/`$/, "") }
     end
 
-    def italic(match)
-      { type: :italic, text: match.gsub(/\*/, "") }
-    end
-
     def bold(match)
       { type: :bold, text: match.gsub(/\*/, "") }
     end
 
-    def text(match)
-      { type: :text, text: match }
+    def italic(match)
+      { type: :italic, text: match.gsub(/\*/, "") }
     end
 
     def strikethrough(match)
       { type: :strikethrough, text: match.gsub(/~~/, "") }
+    end
+
+    def link(match)
+      { type: :link, text: match.gsub(LINK, '\1'), link: match.gsub(LINK, '\2') }
+    end
+
+    def text(match)
+      { type: :text, text: match }
     end
   end
 end
